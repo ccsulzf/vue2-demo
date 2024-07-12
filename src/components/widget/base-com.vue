@@ -3,7 +3,7 @@
         <component :is="compName" />
         <div class="tool-box" v-if="selectId === id">
             <el-button type="primary" @click="drawer = true" icon="el-icon-setting" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button type="danger" @click="del" icon="el-icon-delete" circle></el-button>
         </div>
         <el-drawer title="我是标题" :visible.sync="drawer" :append-to-body="true" :modal="false">
             <span>我来啦!</span>
@@ -12,6 +12,7 @@
 </template>
 <script>
 import MyTable from './my-table.vue'
+import MyQuota from './my-quota.vue'
 export default {
     props: {
         compName: {
@@ -33,10 +34,15 @@ export default {
     },
     components: {
         MyTable,
+        MyQuota
     },
     methods: {
         selectItem: function () {
 
+        },
+
+        del() {
+            this.$emit('onDelete', this.id);
         }
     }
 }
@@ -51,10 +57,10 @@ export default {
 
 .tool-box {
     position: absolute;
-    left: 0;
-    bottom: -20px;
+    left: 10px;
+    bottom: 10px;
     width: 100%;
     height: 40px;
-    display: flex
+    z-index: 100;
 }
 </style>

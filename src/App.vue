@@ -31,9 +31,9 @@ export default {
 }
 
 .nav {
-    width: 300px;
+    width: 280px;
     height: 100%;
-    border-right: 1px solid lightgray;
+    /* border-right: 1px solid lightgray; */
     /* height: 100vh; */
     /* background: lightgray; */
 }

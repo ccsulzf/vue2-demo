@@ -7,7 +7,7 @@
                     <i class="el-icon-star-off"></i>
                     <span unselectable="on">表单组件</span>
                 </div>
-                <div class="item">
+                <div class="item" @drag="drag('MyQuota')" @dragend="dragend" draggable="true">
                     <i class="el-icon-goods"></i>
                     <span>指标组件</span>
                 </div>

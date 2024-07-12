@@ -6,7 +6,7 @@
                 <grid-item :key="item.i" v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
                     :i="item.i" :minW="item.minW" :minH="item.minH">
                     <div style="width: 100%;height: 100%;" @click.stop="selectItem(item)" v-if="item.compName">
-                        <BaseCom :compName="item.compName" :selectId="selectId" :id="item.i" />
+                        <BaseCom :compName="item.compName" :selectId="selectId" :id="item.i" @onDelete="handleDel" />
                     </div>
                     <span v-else class="text">{{ item.i }}</span>
                 </grid-item>
@@ -91,20 +91,19 @@ export default {
                 compName: this.currCompName
             });
             this.selectId = "-1"
-            try {
-                this.layout = this.layout.filter(obj => obj.i !== 'drop');
-                this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
-                this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
-                // eslint-disable-next-line no-empty
-            } catch {
-            }
-
+            this.layout = this.layout.filter(obj => obj.i !== 'drop');
+            this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
+            this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
         })
     },
     methods: {
         selectItem(item) {
             this.selectId = String(item.i)
-            console.log('click-----')
+        },
+        handleDel(id) {
+            console.log("----------")
+            console.log(id)
+            this.layout = this.layout.filter(obj => obj.i !== id);
         }
     }
 }
