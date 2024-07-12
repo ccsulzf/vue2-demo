@@ -3,13 +3,13 @@
         <div class="group">
             <span class="title">我的组件一</span>
             <div class="list">
-                <div class="item" @drag="drag" @dragend="dragend" draggable="true" unselectable="on">
+                <div class="item" @drag="drag('MyTable')" @dragend="dragend" draggable="true" unselectable="on">
                     <i class="el-icon-star-off"></i>
-                    <span unselectable="on">组件一</span>
+                    <span unselectable="on">表单组件</span>
                 </div>
                 <div class="item">
                     <i class="el-icon-goods"></i>
-                    <span>组件二</span>
+                    <span>指标组件</span>
                 </div>
                 <div class="item">
                     <i class="el-icon-picture-outline"></i>
@@ -48,7 +48,7 @@ export default {
         }, false);
     },
     methods: {
-        drag: function () {
+        drag: function (compName) {
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             let mouseInGrid = false;
             if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -56,7 +56,7 @@ export default {
             }
 
             if (mouseInGrid) {
-                EventBus.$emit('dragIn', { mouseXY, mouseInGrid });
+                EventBus.$emit('dragIn', { mouseXY, mouseInGrid, compName });
             }
 
 
@@ -102,6 +102,7 @@ export default {
     display: flex;
     padding: 10px 5px;
     align-items: center;
+    font-size: 14px;
     gap: 5px;
     width: 48%;
     color: #333;

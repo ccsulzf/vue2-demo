@@ -1,11 +1,13 @@
 <template>
     <div class="content" id="widgetCanvas">
-        <div class="grid">
+        <div class="grid" @click="selectId = '-1'">
             <grid-layout ref="gridlayout" :layout.sync="layout" :col-num="12" :row-height="20" :is-draggable="true"
                 :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
                 <grid-item :key="item.i" v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-                    :i="item.i">
-                    <component v-if="item.compName" :is="item.compName" />
+                    :i="item.i" :minW="item.minW" :minH="item.minH">
+                    <div style="width: 100%;height: 100%;" @click.stop="selectItem(item)" v-if="item.compName">
+                        <BaseCom :compName="item.compName" :selectId="selectId" :id="item.i" />
+                    </div>
                     <span v-else class="text">{{ item.i }}</span>
                 </grid-item>
             </grid-layout>
@@ -14,7 +16,7 @@
 </template>
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout"
-import MyTable from '../components/widget/my-table'
+import BaseCom from '../components/widget/base-com'
 import { EventBus } from '../utils/eventBus';
 let DragPos = { "x": null, "y": null, "w": 1, "h": 1, "i": null };
 // let i = 9
@@ -22,33 +24,36 @@ export default {
     components: {
         GridLayout,
         GridItem,
-        MyTable,
+        BaseCom,
     },
     data() {
         return {
+            currCompName: "",
+            selectId: "-1",
             layout: [
-                { "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", },
-                { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1", },
-                { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
-                { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
-                { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
-                { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
-                { "x": 0, "y": 5, "w": 2, "h": 5, "i": "6" },
-                { "x": 2, "y": 5, "w": 2, "h": 5, "i": "7" },
-                { "x": 4, "y": 5, "w": 2, "h": 5, "i": "8" },
-                { "x": 5, "y": 10, "w": 4, "h": 3, "i": "9" },
+                // { "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", },
+                // { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1", },
+                // { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
+                // { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
+                // { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
+                // { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
+                // { "x": 0, "y": 5, "w": 2, "h": 5, "i": "6" },
+                // { "x": 2, "y": 5, "w": 2, "h": 5, "i": "7" },
+                // { "x": 4, "y": 5, "w": 2, "h": 5, "i": "8" },
+                { "x": 0, "y": 0, "w": 6, "h": 12, "i": "0", minW: 6, minH: 10, compName: 'MyTable' },
             ],
         }
     },
     created() {
-        EventBus.$on('dragIn', ({ mouseXY, mouseInGrid }) => {
+        EventBus.$on('dragIn', ({ mouseXY, mouseInGrid, compName }) => {
+            this.currCompName = compName
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
                 this.layout.push({
                     x: (this.layout.length * 2) % (this.colNum || 12),
                     y: this.layout.length + (this.colNum || 12), // puts it at the bottom
-                    w: 1,
-                    h: 1,
+                    w: 2,
+                    h: 2,
                     i: 'drop',
                 });
             }
@@ -80,9 +85,12 @@ export default {
                 w: 6,
                 h: 12,
                 i: DragPos.i,
-                compName: 'MyTable',
+                minH: 2,
+                minW: 2,
+                // compName: 'MyTable',
+                compName: this.currCompName
             });
-
+            this.selectId = "-1"
             try {
                 this.layout = this.layout.filter(obj => obj.i !== 'drop');
                 this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
@@ -92,6 +100,12 @@ export default {
             }
 
         })
+    },
+    methods: {
+        selectItem(item) {
+            this.selectId = String(item.i)
+            console.log('click-----')
+        }
     }
 }
 </script>
@@ -106,6 +120,7 @@ export default {
     width: 100%;
 }
 
+
 .droppable-element {
     width: 150px;
     text-align: center;
@@ -117,12 +132,14 @@ export default {
 
 
 .vue-grid-layout {
+    min-height: 100vh;
     background: #eee;
 }
 
 .vue-grid-item:not(.vue-grid-placeholder) {
-    background: #ccc;
-    border: 1px solid black;
+    background: #fff;
+    border-radius: 5px;
+    /* border: 1px solid black; */
 }
 
 .vue-grid-item .resizing {
