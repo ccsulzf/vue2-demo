@@ -27,9 +27,29 @@
                     <i class="el-icon-goods"></i>
                     <span>指标组件</span>
                 </div>
-                <div class="item">
+                <div class="item" @drag="drag({
+                    compName: 'MyFlow',
+                    x: 0,
+                    y: 0,
+                    w: 6,
+                    h: 12,
+                    minW: 2,
+                    minH: 2,
+                })" @dragend="dragend" draggable="true">
                     <i class="el-icon-picture-outline"></i>
-                    <span>组件三</span>
+                    <span>工作流组件</span>
+                </div>
+                <div class="item" @drag="drag({
+                    compName: 'MyNotify',
+                    x: 0,
+                    y: 0,
+                    w: 6,
+                    h: 12,
+                    minW: 2,
+                    minH: 2,
+                })" @dragend="dragend" draggable="true">
+                    <i class="el-icon-picture-outline"></i>
+                    <span>通知消息组件</span>
                 </div>
             </div>
         </div>
