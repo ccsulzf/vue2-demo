@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import MyTable from './my-table.vue'
+import MyTable from './my-table/my-table.vue'
 import MyQuota from './my-quota.vue'
 import MyFlow from './my-flow.vue'
 import MyNotify from './my-notify.vue'
