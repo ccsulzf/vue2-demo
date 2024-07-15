@@ -3,11 +3,27 @@
         <div class="group">
             <span class="title">我的组件一</span>
             <div class="list">
-                <div class="item" @drag="drag('MyTable')" @dragend="dragend" draggable="true" unselectable="on">
+                <div class="item" @drag="drag({
+                    compName: 'MyTable',
+                    x: 0,
+                    y: 0,
+                    w: 6,
+                    h: 12,
+                    minW: 2,
+                    minH: 2,
+                })" @dragend="dragend" draggable="true" unselectable="on">
                     <i class="el-icon-star-off"></i>
                     <span unselectable="on">表单组件</span>
                 </div>
-                <div class="item" @drag="drag('MyQuota')" @dragend="dragend" draggable="true">
+                <div class="item" @drag="drag({
+                    compName: 'MyQuota',
+                    x: 0,
+                    y: 0,
+                    w: 3,
+                    h: 5,
+                    minW: 3,
+                    minH: 5,
+                })" @dragend="dragend" draggable="true">
                     <i class="el-icon-goods"></i>
                     <span>指标组件</span>
                 </div>
@@ -48,7 +64,7 @@ export default {
         }, false);
     },
     methods: {
-        drag: function (compName) {
+        drag: function (currWidget) {
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             let mouseInGrid = false;
             if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
@@ -56,7 +72,9 @@ export default {
             }
 
             if (mouseInGrid) {
-                EventBus.$emit('dragIn', { mouseXY, mouseInGrid, compName });
+                EventBus.$emit('dragIn', {
+                    mouseXY, mouseInGrid, currWidget
+                });
             }
 
 

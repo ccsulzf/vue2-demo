@@ -28,6 +28,15 @@ export default {
     },
     data() {
         return {
+            currWidget: {
+                compName: "",
+                x: 0,
+                y: 0,
+                w: 0,
+                h: 0,
+                minW: 0,
+                minH: 0,
+            },
             currCompName: "",
             selectId: "-1",
             layout: [
@@ -45,16 +54,16 @@ export default {
         }
     },
     created() {
-        EventBus.$on('dragIn', ({ mouseXY, mouseInGrid, compName }) => {
-            this.currCompName = compName
+        EventBus.$on('dragIn', ({ mouseXY, mouseInGrid, currWidget }) => {
+            this.currWidget = currWidget
+
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
                 this.layout.push({
                     x: (this.layout.length * 2) % (this.colNum || 12),
                     y: this.layout.length + (this.colNum || 12), // puts it at the bottom
-                    w: 2,
-                    h: 2,
                     i: 'drop',
+                    ...currWidget
                 });
             }
             let index = this.layout.findIndex(item => item.i === 'drop');
@@ -82,13 +91,8 @@ export default {
             this.layout.push({
                 x: DragPos.x,
                 y: DragPos.y,
-                w: 6,
-                h: 12,
                 i: DragPos.i,
-                minH: 2,
-                minW: 2,
-                // compName: 'MyTable',
-                compName: this.currCompName
+                ...this.currWidget
             });
             this.selectId = "-1"
             this.layout = this.layout.filter(obj => obj.i !== 'drop');
