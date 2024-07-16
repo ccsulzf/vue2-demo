@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="group">
-            <span class="title">我的组件一</span>
+            <span class="title">我的组件</span>
             <div class="list">
                 <div class="item" @drag="drag({
                     compName: 'MyTable',
@@ -11,7 +11,7 @@
                     minH: 2,
                 })" @dragend="dragend" draggable="true" unselectable="on">
                     <i class="el-icon-star-off"></i>
-                    <span unselectable="on">表格组件</span>
+                    <span unselectable="on">知识库组件</span>
                 </div>
                 <div class="item" @drag="drag({
                     compName: 'MyQuota',
@@ -45,9 +45,19 @@
                     <i class="el-icon-picture-outline"></i>
                     <span>通知消息组件</span>
                 </div>
+                <div class="item" @drag="drag({
+                    compName: 'MyEntrance',
+                    w: 6,
+                    h: 12,
+                    minW: 2,
+                    minH: 2,
+                })" @dragend="dragend" draggable="true">
+                    <i class="el-icon-picture-outline"></i>
+                    <span>系统入口组件</span>
+                </div>
             </div>
         </div>
-        <div class="group">
+        <!-- <div class="group">
             <span class="title">我的组件一</span>
             <div class="list">
 
@@ -60,7 +70,7 @@
                     <span>组件三</span>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>

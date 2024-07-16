@@ -113,6 +113,7 @@ export default {
     gap: 20px;
     border-bottom: 1px solid #f1f1f1;
     justify-content: space-between;
+    align-items: center;
 }
 
 .title {

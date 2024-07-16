@@ -15,6 +15,7 @@ import MyTable from './my-table/my-table.vue'
 import MyQuota from './my-quota.vue'
 import MyFlow from './my-flow.vue'
 import MyNotify from './my-notify.vue'
+import MyEntrance from './my-entrance.vue'
 export default {
     props: {
         compName: {
@@ -38,7 +39,8 @@ export default {
         MyTable,
         MyQuota,
         MyFlow,
-        MyNotify
+        MyNotify,
+        MyEntrance
     },
     methods: {
         selectItem: function () {
