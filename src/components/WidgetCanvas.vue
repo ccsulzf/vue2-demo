@@ -49,14 +49,50 @@ export default {
                 // { "x": 0, "y": 5, "w": 2, "h": 5, "i": "6" },
                 // { "x": 2, "y": 5, "w": 2, "h": 5, "i": "7" },
                 // { "x": 4, "y": 5, "w": 2, "h": 5, "i": "8" },
-                { "x": 0, "y": 0, "w": 6, "h": 12, "i": "0", minW: 6, minH: 10, compName: 'MyTable' },
+                // { "x": 0, "y": 0, "w": 6, "h": 12, "i": "0", minW: 6, minH: 10, compName: 'MyTable' },
             ],
         }
     },
     created() {
-        EventBus.$on('dragIn', ({ mouseXY, mouseInGrid, currWidget }) => {
-            this.currWidget = currWidget
+        EventBus.$on('dragIn', this.handelDragIn);
+        EventBus.$on('dragEnd', this.handelDragEnd)
+    },
+    destroyed() {
+        EventBus.$off('dragIn', this.handelDragIn)
+        EventBus.$off('dragEnd', this.handelDragEnd)
+    },
+    methods: {
+        selectItem(item) {
+            this.selectId = String(item.i)
+        },
+        handelDragEnd({ mouseInGrid }) {
+            if (mouseInGrid === true) {
+                this.$refs.gridlayout.dragEvent('dragend', 'drop', DragPos.x, DragPos.y, 1, 1);
+                this.selectId = "-1"
+                this.layout = this.layout.filter(obj => obj.i !== 'drop');
+                this.layout.push({
+                    x: DragPos.x,
+                    y: DragPos.y,
+                    i: DragPos.i,
+                    ...this.currWidget
+                });
+                this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
+                try {
+                    this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
+                    // eslint-disable-next-line no-empty
+                } catch (error) {
 
+                }
+            } else {
+                // eslint-disable-next-line no-debugger
+                this.layout = this.layout.filter(obj => obj.i !== 'drop');
+                this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "none";
+
+            }
+
+        },
+        handelDragIn({ mouseXY, mouseInGrid, currWidget }) {
+            this.currWidget = currWidget
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             if (mouseInGrid === true && (this.layout.findIndex(item => item.i === 'drop')) === -1) {
                 this.layout.push({
@@ -84,29 +120,8 @@ export default {
                     this.layout = this.layout.filter(obj => obj.i !== 'drop');
                 }
             }
-        });
-
-        EventBus.$on('dragEnd', () => {
-            this.$refs.gridlayout.dragEvent('dragend', 'drop', DragPos.x, DragPos.y, 1, 1);
-            this.layout.push({
-                x: DragPos.x,
-                y: DragPos.y,
-                i: DragPos.i,
-                ...this.currWidget
-            });
-            this.selectId = "-1"
-            this.layout = this.layout.filter(obj => obj.i !== 'drop');
-            this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
-            this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
-        })
-    },
-    methods: {
-        selectItem(item) {
-            this.selectId = String(item.i)
         },
         handleDel(id) {
-            console.log("----------")
-            console.log(id)
             this.layout = this.layout.filter(obj => obj.i !== id);
         }
     }
@@ -212,5 +227,9 @@ export default {
     -moz-columns: 120px;
     -webkit-columns: 120px;
     columns: 120px;
+}
+
+/deep/ .vue-grid-item.vue-grid-placeholder {
+    background: green !important;
 }
 </style>

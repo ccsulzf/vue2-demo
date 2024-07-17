@@ -10,7 +10,7 @@
             }" placement="bottom-end" trigger="manual" v-model="visible">
 
                 <FilterForm />
-                <el-button type="text" slot="reference" @click.stop="visible = !visible">
+                <el-button style="padding: 0;" type="text" slot="reference" @click.stop="visible = !visible">
                     <span v-if="!visible">展开 <i class="el-icon-caret-bottom"></i></span>
                     <span v-else>收起 <i class="el-icon-caret-bottom"></i></span>
                 </el-button>
@@ -26,7 +26,7 @@
             </el-table-column>
             <el-table-column label="操作" width="80" fixed="right">
                 <template slot-scope>
-                    <el-button type="text">查看</el-button>
+                    <el-button style="padding: 0;" type="text">查看</el-button>
                 </template>
             </el-table-column>
         </el-table>

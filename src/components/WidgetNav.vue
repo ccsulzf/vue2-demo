@@ -15,7 +15,6 @@
                 </div>
                 <div class="item" @drag="drag({
                     compName: 'MyQuota',
-
                     w: 3,
                     h: 5,
                     minW: 3,
@@ -26,7 +25,6 @@
                 </div>
                 <div class="item" @drag="drag({
                     compName: 'MyFlow',
-
                     w: 6,
                     h: 12,
                     minW: 2,
@@ -100,8 +98,6 @@ export default {
                     mouseXY, mouseInGrid, currWidget
                 });
             }
-
-
         },
         dragend: function () {
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
@@ -109,9 +105,7 @@ export default {
             if (((mouseXY.x > parentRect.left) && (mouseXY.x < parentRect.right)) && ((mouseXY.y > parentRect.top) && (mouseXY.y < parentRect.bottom))) {
                 mouseInGrid = true;
             }
-            if (mouseInGrid === true) {
-                EventBus.$emit('dragEnd');
-            }
+            EventBus.$emit('dragEnd', { mouseInGrid });
         }
     }
 }
