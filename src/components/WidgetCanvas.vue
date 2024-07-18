@@ -1,8 +1,8 @@
 <template>
     <div class="content" id="widgetCanvas">
         <div class="grid" @click="selectId = '-1'">
-            <grid-layout ref="gridlayout" :layout.sync="layout" :col-num="12" :row-height="20" :is-draggable="true"
-                :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
+            <grid-layout id="test-123123" ref="gridlayout" :layout.sync="layout" :col-num="12" :row-height="20"
+                :is-draggable="true" :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
                 <grid-item :key="item.i" v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
                     :i="item.i" :minW="item.minW" :minH="item.minH">
                     <div style="width: 100%;height: 100%;" @click.stop="selectItem(item)" v-if="item.compName">
@@ -40,16 +40,7 @@ export default {
             currCompName: "",
             selectId: "-1",
             layout: [
-                // { "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", },
-                // { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1", },
-                // { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
-                // { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
-                // { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
-                // { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
-                // { "x": 0, "y": 5, "w": 2, "h": 5, "i": "6" },
-                // { "x": 2, "y": 5, "w": 2, "h": 5, "i": "7" },
-                // { "x": 4, "y": 5, "w": 2, "h": 5, "i": "8" },
-                // { "x": 0, "y": 0, "w": 6, "h": 12, "i": "0", minW: 6, minH: 10, compName: 'MyTable' },
+
             ],
         }
     },
@@ -78,18 +69,26 @@ export default {
                 });
                 this.$refs.gridLayout.dragEvent('dragend', DragPos.i, DragPos.x, DragPos.y, 1, 1);
                 try {
-                    this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
+                    if (this.$refs.gridLayout && this.$refs.gridLayout.$children.length > this.layout.length) {
+                        this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "block";
+                    }
                     // eslint-disable-next-line no-empty
                 } catch (error) {
 
                 }
             } else {
                 // eslint-disable-next-line no-debugger
-                this.layout = this.layout.filter(obj => obj.i !== 'drop');
-                this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "none";
+                // debugger
+                try {
+                    if (this.$refs.gridLayout && this.$refs.gridLayout.$children.length > this.layout.length) {
+                        this.$refs.gridLayout.$children[this.layout.length].$refs.item.style.display = "none";
+                        this.layout = this.layout.filter(obj => obj.i !== 'drop');
+                    }
+                    // eslint-disable-next-line no-empty
+                } catch (error) {
 
+                }
             }
-
         },
         handelDragIn({ mouseXY, mouseInGrid, currWidget }) {
             this.currWidget = currWidget

@@ -3,53 +3,53 @@
         <div class="group">
             <span class="title">我的组件</span>
             <div class="list">
-                <div class="item" @drag="drag({
+                <div class="item" @drag="startDrag({
                     compName: 'MyTable',
                     w: 6,
                     h: 12,
                     minW: 2,
                     minH: 2,
-                })" @dragend="dragend" draggable="true" unselectable="on">
+                })" @dragend="endDrag" draggable="true" unselectable="on">
                     <i class="el-icon-star-off"></i>
                     <span unselectable="on">知识库组件</span>
                 </div>
-                <div class="item" @drag="drag({
+                <div class="item" @drag="startDrag({
                     compName: 'MyQuota',
                     w: 3,
                     h: 5,
                     minW: 3,
                     minH: 5,
-                })" @dragend="dragend" draggable="true">
+                })" @dragend="endDrag" draggable="true">
                     <i class="el-icon-goods"></i>
                     <span>指标组件</span>
                 </div>
-                <div class="item" @drag="drag({
+                <div class="item" @drag="startDrag({
                     compName: 'MyFlow',
                     w: 6,
                     h: 12,
                     minW: 2,
                     minH: 2,
-                })" @dragend="dragend" draggable="true">
+                })" @dragend="endDrag" draggable="true">
                     <i class="el-icon-picture-outline"></i>
                     <span>工作流组件</span>
                 </div>
-                <div class="item" @drag="drag({
+                <div class="item" @drag="startDrag({
                     compName: 'MyNotify',
                     w: 6,
                     h: 12,
                     minW: 2,
                     minH: 2,
-                })" @dragend="dragend" draggable="true">
+                })" @dragend="endDrag" draggable="true">
                     <i class="el-icon-picture-outline"></i>
                     <span>通知消息组件</span>
                 </div>
-                <div class="item" @drag="drag({
+                <div class="item" @drag="startDrag({
                     compName: 'MyEntrance',
                     w: 6,
                     h: 12,
-                    minW: 2,
-                    minH: 2,
-                })" @dragend="dragend" draggable="true">
+                    minW: 6,
+                    minH: 12,
+                })" @dragend="endDrag" draggable="true">
                     <i class="el-icon-picture-outline"></i>
                     <span>系统入口组件</span>
                 </div>
@@ -80,12 +80,34 @@ export default {
         return {}
     },
     mounted() {
-        document.addEventListener("dragover", function (e) {
-            mouseXY.x = e.clientX;
-            mouseXY.y = e.clientY;
-        }, false);
+        document.addEventListener('dragover', this.updateMousePosition, false);
+    },
+    destroyed() {
+        document.removeEventListener('dragover', this.updateMousePosition);
     },
     methods: {
+        updateMousePosition(e) {
+            mouseXY.x = e.clientX;
+            mouseXY.y = e.clientY;
+        },
+
+        startDrag(currWidget) {
+            this.emitDragEvent('dragIn', currWidget);
+        },
+        endDrag() {
+            this.emitDragEvent('dragEnd');
+        },
+        emitDragEvent(eventType, currWidget = null) {
+            const parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
+            const mouseInGrid = mouseXY.x > parentRect.left && mouseXY.x < parentRect.right &&
+                mouseXY.y > parentRect.top && mouseXY.y < parentRect.bottom;
+
+            EventBus.$emit(eventType, {
+                mouseXY,
+                mouseInGrid,
+                currWidget
+            });
+        },
         drag: function (currWidget) {
             let parentRect = document.getElementById('widgetCanvas').getBoundingClientRect();
             let mouseInGrid = false;
