@@ -26,7 +26,7 @@
 </template>
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout"
-import BaseCom from './components/widget/base-com.vue';
+import BaseCom from '../components/widget/base-com.vue';
 let mouseXY = { "x": null, "y": null };
 let DragPos = { "x": null, "y": null, "w": 1, "h": 1, "i": null };
 export default {

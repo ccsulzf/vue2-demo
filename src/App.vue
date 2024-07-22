@@ -1,39 +1,27 @@
 <template>
-    <MyGrid />
-    <!-- <div class="content">
-        <div class="nav">
-            <WidgetNav />
-        </div>
-        <div class="canvas">
-            <WidgetCanvas />
-        </div>
-    </div> -->
+    <div id="app">
+        <router-view />
+    </div>
 </template>
+
 <script>
-import MyGrid from './my-grid.vue'
 export default {
-    components: {
-        MyGrid,
+    data() {
+        return {
+            activeIndex: "1" // 默认选中的菜单项
+        };
+    },
+    methods: {
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+            // 处理菜单项的选择事件
+        }
     }
-}
+};
 </script>
 
-<style scoped>
-.content {
-    width: 100%;
-    height: 100vh;
-    box-sizing: border-box;
-    display: flex;
-}
-
-.nav {
-    width: 280px;
-    height: 100%;
-}
-
-.canvas {
-    flex: 1;
-    height: 100%;
-
+<style>
+.el-menu-demo {
+    /* 你的样式 */
 }
 </style>
